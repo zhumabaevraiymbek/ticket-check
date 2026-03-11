@@ -1,4 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// ─── Read ui_locales from URL (sent by Viasat IFC portal) ────────────────────
+function getInitialLang() {
+  const params = new URLSearchParams(window.location.search);
+  const locale = params.get("ui_locales") || "";
+  const code = locale.split("-")[0].toLowerCase();
+  if (code === "kk" || code === "kz") return "kz";
+  if (code === "ru") return "ru";
+  if (code === "en") return "en";
+  return "ru"; // default
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ─── API PLACEHOLDER ──────────────────────────────────────────────────────────
 async function checkTicket({ ticketNumber, surname, ffpNumber }) {
@@ -297,7 +309,7 @@ function FlightResult({ data, t }) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState("ru");
+  const [lang, setLang] = useState(getInitialLang);
   const [ticketNumber, setTicketNumber] = useState("");
   const [surname, setSurname] = useState("");
   const [ffpNumber, setFfpNumber] = useState("");
